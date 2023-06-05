@@ -1,3 +1,4 @@
+import sys
 import os
 from dotenv import load_dotenv
 import openai
@@ -37,10 +38,19 @@ def get_web_info(url):
     return title, description
 
 
-def process_info_with_ai(url, title, description, language="spanish"):
-    # Function to use GPT-4 API to summarize the text
+def process_info_with_ai(url, title, description):
 
-    openai.api_key = os.getenv("OPENAI_API_KEY")
+    language = os.getenv("LANGUAGE")
+
+    if language is None:
+        language = "english"
+
+    openai_api = os.getenv("OPENAI_API_KEY")
+    if openai_api is None:
+        print_ts("Please set OPENAI_API_KEY in .env file")
+        return "error"
+
+    openai.api_key = openai_api
 
     parsed_url = urlparse(url)
     hostname = parsed_url.netloc
@@ -97,10 +107,20 @@ def create_notion_page(url, title, description_content):
 
     print_ts("Creating Notion page...")
 
-    notion = Client(auth=os.getenv("NOTION_API_KEY"))
+    notion_api_key = os.getenv("NOTION_API_KEY")
+    if notion_api_key is None:
+        print_ts("Please set NOTION_API_KEY in .env file")
+        return "error"
+
+    notion = Client(auth=notion_api_key)
+
+    notion_db_id = os.getenv("NOTION_DB_ID")
+    if notion_db_id is None:
+        print_ts("Please set NOTION_DB_ID in .env file")
+        return "error"
 
     page = notion.pages.create(
-        parent={"database_id": os.getenv("NOTION_DB_ID")},
+        parent={"database_id": notion_db_id},
         properties={
             "Nombre": {"title": [{"text": {"content": title}}]},
             "URL": {"url": url},
@@ -130,6 +150,11 @@ def main():
     print_ts("Starting the script...")
     print_ts()
     load_dotenv()
+    your_favorites_file = os.getenv("YOUR_FAVORITES_FILE")
+    if your_favorites_file is None:
+        print_ts("Please set YOUR_FAVORITES_FILE in .env file")
+        sys.exit()
+
     with open(os.getenv("YOUR_FAVORITES_FILE"), "r") as f:
         urls = f.readlines()
 
