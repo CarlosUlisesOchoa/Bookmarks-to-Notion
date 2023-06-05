@@ -6,6 +6,15 @@ import requests
 from notion_client import Client
 import time
 from urllib.parse import urlparse
+import datetime
+
+
+def print_ts(message=""):
+    if len(message) == 0:
+        print()
+        return
+    timestamp = datetime.datetime.now().strftime("[%H:%M:%S]")
+    print(f"{timestamp}: {message}")
 
 
 def get_web_info(url):
@@ -28,21 +37,27 @@ def get_web_info(url):
     return title, description
 
 
-def process_description(url, title, description):
+def process_info_with_ai(url, title, description, language="spanish"):
     # Function to use GPT-4 API to summarize the text
 
     openai.api_key = os.getenv("OPENAI_API_KEY")
 
     parsed_url = urlparse(url)
-
     hostname = parsed_url.netloc
 
-    prompt = f"Consider the website identified by hostname '{hostname}', with the title '{title}', and the description '{description}'. Using any pre-existing knowledge you might have about the site, generate a detailed and accurate description. The description should not include the URL or hostname, and its length should range between 400 to 550 characters. In cases where sufficient information is unavailable to generate a comprehensive description, return 'No information found'."
+    # prompt, english only
+    # prompt = f"As a Notion page admin, you're tasked with creating Notion pages using the information provided as well as any pre-existing knowledge you have. The website has the title '{title}' and hostname '{hostname}', and its meta tag description is '{description}'. Please evaluate the title and, if necessary, simplify it for use in a Notion page (e.g., a title like 'Welcome to Flask etc...' could be simplified to 'Flask'). If there's no title, please replace it with 'No title found'. Following that, generate a detailed and engaging description. Remember not to include the URL or hostname in the description, and aim for a length between 400 to 550 characters. If there's insufficient information to create a comprehensive description, please use 'No information found'. Please format your final output like this: 'title|||description', which will make parsing easier."
 
-    print(f"[OpenAI] Trying to obtain a description for {url}...")
-    print()  # tetemp
+    # new prompt, multilanguage v1
+    # prompt = f"As a Notion page admin, you're tasked with creating Notion pages using the information provided as well as any pre-existing knowledge you have. The website has the title '{title}' and hostname '{hostname}', and its meta tag description is '{description}'. Please evaluate the title and, if necessary, simplify it for use in a Notion page (e.g., a title like 'Welcome to Flask etc...' could be simplified to 'Flask'). If there's no title, please replace it with 'No title found'. Following that, generate a detailed and engaging description. Remember not to include the URL or hostname in the description, and aim for a length between 400 to 550 characters. If there's insufficient information to create a comprehensive description, please use 'No information found'. Please format your final output like this: 'title|||description', which will make parsing easier. Lastly, please ensure that the title and description are in {language}."
 
-    start_time = time.time()  # Start the timer
+    # new prompt, multilanguage v2
+    prompt = f"As a Notion page admin, you're tasked with creating Notion pages using the information provided as well as any pre-existing knowledge you have. The website has the title '{title}' and hostname '{hostname}', and its meta tag description is '{description}'. Please evaluate the title and, if necessary, simplify it for use in a Notion page (e.g., a title like 'Welcome to Flask etc...' could be simplified to 'Flask'). If there's no title, please replace it with 'No title found'. Following that, generate a detailed and engaging description. Remember not to include the URL or hostname in the description, and aim for a length between 400 to 550 characters. If there's insufficient information to create a comprehensive description, please use 'No information found'. Be mindful to keep brand names and specific terminologies in their original language. Please format your final output like this: 'title|||description', which will make parsing easier. Lastly, please ensure that the title and description are in {language}."
+
+    print_ts(f"Generating best page title and description with AI...")
+
+    # Start the timer
+    start_time = time.time()
 
     try:
         response = openai.Completion.create(
@@ -56,35 +71,31 @@ def process_description(url, title, description):
             stream=False
         )
 
-        end_time = time.time()  # End the timer
-        elapsed_time_ms = (end_time - start_time) * \
-            1000  # Convert to milliseconds
-        # round to zero decimal places
-        elapsed_time = round(elapsed_time_ms, 0)
-        # print(f"OpenAI API elapsed time: {elapsed_time} ms")
+        # End the timer
+        end_time = time.time()
 
-        # Check if there are any choices in the response
+        # Convert to milliseconds
+        elapsed_time = round((end_time - start_time) * 1000, 0)
+
         if response.choices and response.choices[0].text.strip():
             return response.choices[0].text.strip()
         else:
-            return "No information found"
+            print_ts("OpenAI API unknow error")
+            return "error"
 
     except openai.OpenAIError as e:
-        # Handle API error
-        print(f"OpenAI API Error: {str(e)}")
+        print_ts(f"OpenAI API Error: {str(e)}")
         return "error"
 
     except Exception as e:
-        # Handle other errors
-        print(f"Error occurred: {str(e)}")
+        print_ts(f"Unexpected Error: {str(e)}")
         return "error"
-
-# Function to create a new page in Notion
 
 
 def create_notion_page(url, title, description_content):
+    # Function to create a new page in Notion
 
-    print("Creating Notion page...")
+    print_ts("Creating Notion page...")
 
     notion = Client(auth=os.getenv("NOTION_API_KEY"))
 
@@ -101,44 +112,38 @@ def create_notion_page(url, title, description_content):
                 "paragraph": {"rich_text": [{"text": {"content": description_content}}]},
             }
         ]
-        # page2 = plugin.notion.pages.create(
-        #     parent=parent, properties=properties, children=children
-        # )
     )
 
     return page
 
 
-# Function to create a new page for a given URL
-
-
 def scrap_web_info(url):
-    print("Scraping web info...")
+    print_ts(f"Scraping web info...")
     title, description = get_web_info(url)
-    # print("--------- Create Notion page ---------------")  # tetemp
-    # print(f"Title: {title}")  # tetemp
-    print()  # tetemp
-    processed_description = process_description(url, title, description)
-    # print(f"Processed description: {processed_description}")  # tetemp
-    # print()  # tetemp
-    create_notion_page(url, title, processed_description)
-
-
-# Main function to read the URLs and create the pages
+    processed_info = process_info_with_ai(url, title, description)
+    processed_title, processed_description = processed_info.split("|||")
+    create_notion_page(url, processed_title, processed_description)
 
 
 def main():
+    print_ts()
+    print_ts("Starting the script...")
+    print_ts()
     load_dotenv()
     with open(os.getenv("YOUR_FAVORITES_FILE"), "r") as f:
         urls = f.readlines()
 
     for url in urls:
-        url = url.strip()  # Remove newline characters
+        # Remove newline characters
+        url = url.strip()
         try:
+            print_ts(f"[ ======= {url} ======= ]")
             scrap_web_info(url)
-            print(f"Successfully created a page for {url}")
+            print_ts("Successfully created Notion page")
+            print_ts()
         except Exception as e:
-            print(f"Failed to create a page for {url}: {e}")
+            print_ts(f"Failed to create a page for {url}: {e}")
+            print_ts()
 
 
 # Run the main function
