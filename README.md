@@ -2,6 +2,14 @@
 
 This is a Python script that uses the BeautifulSoup and requests libraries to scrape web pages, then uses the OpenAI API to process the scraped information and finally creates a new page in Notion using the notion_client library.
 
+## Screenshots
+
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/28354a47-1e06-4c1e-8a06-8e4f8d9ff2f1)
+
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/335ecaf3-4c75-413c-8c74-fa07dcbf2720)
+
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/9046cab8-bfb4-4e66-8c2a-51d193a97f55)
+
 ## Environment Variables
 
 The script uses environment variables to configure some settings. These variables must be declared in a `.env` file, which must be located in the same directory as the script. Here are the environment variables used:
@@ -33,6 +41,3 @@ python main.py
 
 The script will read the URLs from the bookmarks file, scrape each web page, process the scraped information, and create a new page in Notion.
 
-## Output
-
-The script logs its progress and prints messages with timestamps to the console. After each URL is processed, the script prints whether the operation was successful. At the end, the script prints the total number of URLs, and how many of them were processed successfully or failed.
