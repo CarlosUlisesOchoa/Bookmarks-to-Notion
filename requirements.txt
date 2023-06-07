@@ -1,0 +1,5 @@
+python-dotenv==1.0.0
+pip show beautifulsoup4==4.12.2
+pip show requests==2.31.0
+pip show openai==0.27.2
+pip show notion_client==2.0.0
