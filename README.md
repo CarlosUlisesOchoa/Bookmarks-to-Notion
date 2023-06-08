@@ -1,16 +1,20 @@
 <a name="readme-top"></a>
 <div align="center">
-  <h1>Bookmarks2Notion</h1>
-  <a href="#!"><img src="https://img.shields.io/badge/latest%20release-v1.0.0-blue" /></a>
-  <a href="#!"><img src="https://img.shields.io/tokei/lines/github/carlosulisesochoa/Bookmarks-to-Notion" /></a>
-  <a href="#!"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" /></a>
-  <a href="#!"><img src="https://img.shields.io/badge/license-MIT-blue" /></a>
+	<h1>Bookmarks2Notion</h1>
+	<p align="center">
+		<a href="#!"><img src="https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/63110d8d-dc76-4e1a-99e8-d605302e9968" width="350" /></a>
+	</p>
+	<a href="#!"><img src="https://img.shields.io/badge/latest%20release-v1.0.0-blue" /></a>
+	<a href="#!"><img src="https://img.shields.io/tokei/lines/github/carlosulisesochoa/Bookmarks-to-Notion" /></a>
+	<a href="#!"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" /></a>
+	<a href="#!"><img src="https://img.shields.io/badge/license-MIT-blue" /></a>
 </div>
 
 <br/>
 
-Bookmarks2Notion is a script designed to import your bookmarks into Notion. Using a combination of web scraping and the OpenAI language model, it creates a new page in your Notion database for each bookmarked URL, allowing you to easily organize and access your bookmarks in one central location.
+Bookmarks2Notion is a script designed to import your browser bookmarks into Notion. Using a combination of web scraping and the OpenAI language model, it creates a new page in your Notion database for each bookmarked URL, allowing you to easily organize and access your bookmarks in one central location.
 
+<hr/>
 <br/>
 
 <details>
