@@ -145,4 +145,4 @@ Visit my web [Carlos Ochoa](https://carlos8a.com)
 
 ---
 
-**Note:** If you encounter any issues with the script, please report them [here](https://github.com/CarlosUlisesOchoa/Path-as-a-comment-PowerShell/issues). Contributions are welcome!
+**Note:** If you encounter any issues with the script, please report them [here](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/issues). Contributions are welcome!
