@@ -61,7 +61,7 @@ In order to run this script, you will need:
 - Python 3.8 or higher
 - A Notion account
 - An OpenAI account
-- The bookmarks file you want to import into Notion
+- The bookmarks file you want to import into Notion (compatible with any text format: *.txt, *.html, etc)
 
 <br/><br/><br/>
 
