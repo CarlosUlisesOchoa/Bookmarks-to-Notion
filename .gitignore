@@ -2,6 +2,9 @@
 
 ignore_this_folder/
 
+# Logs
+failed_jobs_*.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

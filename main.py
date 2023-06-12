@@ -8,9 +8,26 @@ from notion_client import Client
 import time
 from urllib.parse import urlparse
 import datetime
+import csv
+import re
 
 
 load_dotenv()
+
+
+def extract_urls_from_file(file_path):
+    url_pattern = re.compile(
+        r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
+    )
+    try:
+        with open(file_path, "r") as file:
+            data = file.read()
+            urls = re.findall(url_pattern, data)
+    except UnicodeDecodeError:
+        raise Exception(
+            f"Cannot process '{file_path}'. It appears to be a binary file."
+        )
+    return urls
 
 
 def print_ts(message=""):
@@ -26,8 +43,34 @@ def validate_environment_variable(variable_name):
     # Validates if an environment variable is set
     variable = os.getenv(variable_name)
     if variable is None:
-        raise EnvironmentError(f"Couldn't load the env variable '{variable_name}', check the .env file")
+        raise EnvironmentError(
+            f"Couldn't load the env variable '{variable_name}', check the .env file"
+        )
     return variable
+
+
+def log_failed_url(url, error):
+    file = validate_environment_variable("FAILED_URLS_FILE")
+
+    if file is None:
+        file = "failed_jobs.csv"
+
+    # Split the filename into name and extension
+    base, extension = os.path.splitext(file)
+
+    # Format the filename to append date like 'failed_jobs_2021-01-31.csv'
+    file = f"{base}_{datetime.datetime.now().strftime('%Y-%m-%d')}{extension}"
+
+    # Check if the file is empty (i.e., we're creating a new file)
+    is_file_empty = not os.path.exists(file) or os.path.getsize(file) == 0
+
+    with open(file, "a", newline="") as f:
+        writer = csv.writer(f)
+        # If it's a new file, write the headers
+        if is_file_empty:
+            writer.writerow(["Time", "URL", "Error"])
+        # write into file like '12:00:00, https://www.google.com, <error message>'
+        writer.writerow([datetime.datetime.now().strftime("%H:%M:%S"), url, str(error)])
 
 
 def get_web_info(url):
@@ -39,7 +82,7 @@ def get_web_info(url):
 
     headers = {"User-Agent": user_agent}
     response = requests.get(url, headers=headers)
-    
+
     soup = BeautifulSoup(response.text, "html.parser")
 
     title = soup.title.string if soup.title else ""
@@ -151,12 +194,11 @@ def main():
 
     try:
         print_ts("Trying to load your bookmarks file...")
-        with open(bookmarks_file, "r") as f:
-            urls = f.readlines()
-            if len(urls) == 0:
-                raise Exception("Bookmarks file is empty")
-            print_ts("Bookmarks file loaded successfully!")
-            print_ts()
+        urls = extract_urls_from_file(bookmarks_file)
+        if len(urls) == 0:
+            raise Exception("No URLs found in the file")
+        print_ts("URLs loaded successfully!")
+        print_ts()
     except FileNotFoundError:
         print_ts(f"Failed to load your bookmarks file '{bookmarks_file}'")
         sys.exit()
@@ -189,9 +231,10 @@ def main():
         except Exception as e:
             failed += 1
             print_ts(f"Failed to create a Notion page. Error: {e}")
+            log_failed_url(url, e)
         finally:
             print_ts()
-    
+
     print_ts(f"Total URL's: {urls.__len__()}")
     print_ts(f"Failed: {failed} | Succeeded: {succeeded}")
 
