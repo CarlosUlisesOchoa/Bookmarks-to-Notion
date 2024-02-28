@@ -12,7 +12,7 @@
 
 <br/>
 
-Bookmarks2Notion is a script designed to import your browser bookmarks into Notion. Using a combination of web scraping and the OpenAI language model, it creates a new page in your Notion database for each bookmarked URL, allowing you to easily organize and access your bookmarks in one central location.
+Bookmarks2Notion is a script designed to import your browser bookmarks into Notion. Using a combination of web scraping and OpenAI API, it creates a new page in your Notion database for each bookmarked URL, allowing you to easily organize and access your bookmarks in one central location.
 
 <hr/>
 <br/>
@@ -70,11 +70,8 @@ In order to run this script, you will need:
 ## How to run
 
 1. Rename `.env.template` to `.env`
-
 2. Inside `.env` set the value to environment variables ([How to do that?](#environment-variables)) 
-
 3. Add your URL's inside the file you specified. (default is bookmarks.txt)
-
 4. Install the required Python packages using pip.
 
 ```
@@ -112,40 +109,55 @@ Note: Instructions on how to get the API key values and database ID can be found
 
 Instructions to get required API key values:
 
-  `OPENAI_API_KEY`: To generate an OpenAI API key, follow these steps:
+### How to get OPENAI_API_KEY
 
-  1. Go to the OpenAI website (https://openai.com/).
-  2. Click on the 'Sign Up' button in the top right corner of the page.
-  3. Fill out the registration form with your details and click on the 'Create Account' button.
-  4. Once you have created an account, go to the 'API keys' section of your account dashboard.
-  5. Click on the 'Generate New Key' button to create a new API key.
-  6. Copy the API key and you got the value for OPENAI_API_KEY
+To generate an OpenAI API key, follow these steps:
 
-  Note: You may need to provide additional information or complete additional steps to verify your identity or payment information before you can generate an API key.
-
-`NOTION_API_KEY`: To generate a Notion API key, follow these steps:
-
-1. Go to the Notion website (https://www.notion.com/).
-2. Log in to your account.
-3. Click on the 'Settings & Members' button in the top right corner of the page.
-4. Click on the 'Integrations' tab.
-5. Click on the 'Add a new integration' button.
-6. Give your integration a name and click on the 'Submit' button.
-7. Copy the API key and you got the value for NOTION_API_KEY.
+1. Go to the OpenAI website (https://openai.com/).
+2. Click on the 'Sign Up' button in the top right corner of the page.
+3. Fill out the registration form with your details and click on the 'Create Account' button.
+4. Once you have created an account, go to the 'API keys' section of your account dashboard.
+5. Click on the 'Generate New Key' button to create a new API key.
+6. Copy the API key and you got the value for OPENAI_API_KEY
 
 Note: You may need to provide additional information or complete additional steps to verify your identity or payment information before you can generate an API key.
 
-`NOTION_DB_ID`: To find the Notion database ID, follow these steps:
+### How to get NOTION_API_KEY
+
+To generate a Notion API key, follow these steps:
+
+1. Go to my integrations page: https://www.notion.com/my-integrations (You must be logged in)
+2. Click on 'Create new integration'
+
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/ed4ba755-4e9e-4079-a1f0-5c909862dad2)
+
+3. Fill this form and click 'Submit'
+
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/37d7560c-2158-451a-8901-b3c04f287388)
+
+4. Now here is your Notion API key, click on 'Show' and copy it!
+
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/d3817b9f-4b9b-40e5-a407-e8e5d6d18d3e)
+
+5. Congrats, now you got the value for NOTION_API_KEY.
+
+### How to get NOTION_DB_ID
+
+To find the Notion database ID, follow these steps:
 
 1. Go to the Notion website (https://www.notion.com/).
 2. Log in to your account.
-3. Open the database you want to use in your script.
-4. Click on the 'Share' button in the top right corner of the page.
-5. Click on the 'Copy link' button.
-6. Paste the link into a text editor or a web browser.
-7. Look for the string of characters between the last two slashes in the URL. This is the database ID.
+3. Create a new database
+4. Click on 'Share' and click on 'Copy link' button.
+
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/e890d0a6-fda4-43c4-8b1c-d67c65373892)
+
+5. Paste the link into a text editor or a web browser.
+6. Look for the string of characters between the last two slashes in the URL. This is the database ID.
+
 ![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/d43262cf-a33d-490f-9760-37c1c9b1e0fd)
-8. Copy the database ID and you got the value for NOTION_DB_ID.
+
+9. Copy the database ID and you got the value for NOTION_DB_ID.
 
 <br/><br/><br/>
 
