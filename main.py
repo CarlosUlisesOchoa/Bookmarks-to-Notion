@@ -1,7 +1,7 @@
 import sys
 import os
 from dotenv import load_dotenv
-import openai
+from openai import OpenAI
 from bs4 import BeautifulSoup
 import requests
 from notion_client import Client
@@ -99,12 +99,50 @@ def process_info_with_ai(url, title, description):
     if language is None:
         language = "english"
 
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-
     parsed_url = urlparse(url)
     hostname = parsed_url.netloc
 
-    prompt = f"As a Notion page admin, you're tasked with creating Notion pages using the information provided as well as any pre-existing knowledge you have. The website has the title '{title}' and hostname '{hostname}', and its meta tag description is '{description}'. Please evaluate the title and, if necessary, simplify it for use in a Notion page (e.g. if original title is like 'Welcome to Flask etc...' you could simplify it to just 'Flask'). If there's no title, please replace it with 'No title found'. Following that, generate a detailed and engaging description. Remember not to include the URL or hostname in the description, and aim for a length between 400 to 550 characters. If there's insufficient information to create a comprehensive description, please use 'No information found'. Be mindful to keep brand names and specific terminologies in their original language. Please format your final output like this: 'title|||description', which will make parsing easier. Lastly, please ensure that the title and description are in {language}."
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+    ai_messages = [
+        {
+            "role": "assistant",
+            "content": "I'm your Notion page creator. Please provide the details of the website you're working with and I will provide you a title and description suitable for a Notion page.",
+        },
+        {
+            "role": "user",
+            "content": f"Using the provided information about the website titled '{title}', which is hosted at '{hostname}', and described as '{description}', along with any pre-existing knowledge you have, I need you to perform a couple of tasks. First, if necessary, simplify the website's title for better suitability on a Notion page. Next, create a detailed and engaging description that fits the Notion page's context. This description should avoid including the URL or hostname, stay within 400 to 550 characters, and preserve the original brand names and terminologies. If there's not enough information for a detailed description, please summarize with 'No information found'. Remember, the final output should be strictly in the format: '{title}|||{description}'. Make sure the content aligns with {language} language standards.",
+        },
+    ]
+
+    ai_model = os.getenv("OPENAI_API_MODEL")
+    if ai_model is None:
+        raise EnvironmentError(
+            "Couldn't load the env variable 'OPENAI_API_MODEL', check the .env file"
+        )
+
+    ai_temperature = os.getenv("OPENAI_API_TEMPERATURE")
+    # Check if temperature can be parsed to float. If not set it to 0.3
+    try:
+        ai_temperature = float(ai_temperature)
+    except ValueError:
+        ai_temperature = 0.3
+
+    ai_max_tokens = os.getenv("OPENAI_API_MAX_TOKENS")
+    # Check if max tokens can be parsed to int. If not set it to 1000
+    try:
+        ai_max_tokens = int(ai_max_tokens)
+    except ValueError:
+        raise EnvironmentError(
+            "Couldn't load or parse the env variable 'OPENAI_API_MAX_TOKENS', check the .env file"
+        )
+
+    ai_frequency_penalty = os.getenv("OPENAI_API_FREQUENCY_PENALTY")
+    # Check if penalty can be parsed to float. If not set it to 0.5
+    try:
+        ai_frequency_penalty = float(ai_frequency_penalty)
+    except ValueError:
+        ai_frequency_penalty = 0.5
 
     print_ts(f"Generating best page title and description with AI...")
 
@@ -112,15 +150,13 @@ def process_info_with_ai(url, title, description):
     start_time = time.time()
 
     try:
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=prompt,
-            temperature=0.3,
-            max_tokens=600,
-            top_p=1,
-            frequency_penalty=0.5,
-            presence_penalty=0.5,
-            stream=False,
+        # Assuming the completion method or equivalent for detailed content generation
+        response = client.chat.completions.create(
+            model=ai_model,
+            messages=ai_messages,
+            temperature=ai_temperature,
+            max_tokens=ai_max_tokens,
+            frequency_penalty=ai_frequency_penalty,
         )
 
         # End the timer
@@ -129,13 +165,10 @@ def process_info_with_ai(url, title, description):
         # Convert to milliseconds
         elapsed_time = round((end_time - start_time) * 1000, 0)
 
-        if response.choices and response.choices[0].text.strip():
-            return response.choices[0].text.strip()
+        if response.choices and response.choices[0].message.content.strip():
+            return response.choices[0].message.content.strip()
         else:
-            raise Exception("OpenAI API unknow error")
-
-    except openai.OpenAIError as e:
-        raise Exception(f"OpenAI API Error: {str(e)}")
+            raise Exception("OpenAI API unknown error")
 
     except Exception as e:
         raise Exception(f"Unexpected Error: {str(e)}")
