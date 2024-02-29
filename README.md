@@ -38,13 +38,13 @@ Bookmarks2Notion is a script designed to import your browser bookmarks into Noti
 
 <img src="https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/cb2a1bdc-d2a1-4f75-a0aa-6a4464dc492b" alt="image" height=600>
 
-<br/><br/>
+<br/>
 
 <p>Pages created in the Notion DB</p>
 
-<img src="https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/335ecaf3-4c75-413c-8c74-fa07dcbf2720" alt="image" width=700>
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/0b1fdf1d-2899-41f9-b923-b5131b4692e7)
 
-<br/><br/>
+<br/>
 
 <p>Generated page content (includes direct link, title, and description enriched with AI)</p>
 
@@ -148,16 +148,20 @@ To find the Notion database ID, follow these steps:
 1. Go to the Notion website (https://www.notion.com/).
 2. Log in to your account.
 3. Create a new database
-4. Click on 'Share' and click on 'Copy link' button.
+4. Give access to Bookmarks-to-Notion integration. Just click three dots icon -> Connect to -> Bookmarks-to-Notion
+
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/b6b8417b-2da1-429f-851e-a060d4dc80cf)
+
+5. Click on 'Share' and click on 'Copy link' button.
 
 ![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/e890d0a6-fda4-43c4-8b1c-d67c65373892)
 
-5. Paste the link into a text editor or a web browser.
-6. Look for the string of characters between the last two slashes in the URL. This is the database ID.
+6. Paste the link into a text editor or a web browser.
+7. Look for the string of characters between the last two slashes in the URL. This is the database ID.
 
 ![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/d43262cf-a33d-490f-9760-37c1c9b1e0fd)
 
-9. Copy the database ID and you got the value for NOTION_DB_ID.
+8. Copy the database ID and you got the value for NOTION_DB_ID.
 
 <br/><br/><br/>
 
