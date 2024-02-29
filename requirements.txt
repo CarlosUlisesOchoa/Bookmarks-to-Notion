@@ -1,5 +1,5 @@
-python-dotenv==1.0.0
-beautifulsoup4==4.12.2
+python-dotenv==1.0.1
+beautifulsoup4==4.12.3
 requests==2.31.0
-openai==0.27.2
-notion_client==2.0.0
+openai==1.12.0
+notion-client==2.2.1
