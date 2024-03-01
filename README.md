@@ -1,12 +1,11 @@
+# Bookmarks2Notion
 <a name="readme-top"></a>
 <div align="center">
-	<h1>Bookmarks2Notion</h1>
 	<p align="center">
 		<a href="#!"><img src="https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/63110d8d-dc76-4e1a-99e8-d605302e9968" width="350" /></a>
 	</p>
 	<a href="#!"><img src="https://img.shields.io/badge/latest%20release-v1.0.0-blue" /></a>
-	<a href="#!"><img src="https://img.shields.io/tokei/lines/github/carlosulisesochoa/Bookmarks-to-Notion" /></a>
-	<a href="#!"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" /></a>
+	<a href="#!"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen" /></a>
 	<a href="#!"><img src="https://img.shields.io/badge/license-MIT-blue" /></a>
 </div>
 
@@ -15,42 +14,34 @@
 Bookmarks2Notion is a script designed to import your browser bookmarks into Notion. Using a combination of web scraping and OpenAI API, it creates a new page in your Notion database for each bookmarked URL, allowing you to easily organize and access your bookmarks in one central location.
 
 <hr/>
-<br/>
 
-<details>
-  <summary>Table of Contents</summary>
-	<ul>
-		<li><a href="#screenshots">Screenshots</a></li>
-		<li><a href="#prerequisites">Prerequisites</a></li>
-		<li><a href="#how-to-run">How to Run</a></li>
-		<li><a href="#environment-variables">Environment Variables</a></li>
-		<li><a href="#how-to-get-required-api-key-values">How to get required API key values</a></li>
-		<li><a href="#license">License</a></li>
-		<li><a href="#about-developer">About Developer</a></li>
-	</ul>
-</details>
+## Table of Contents
+
+- [Screenshots](#screenshots)
+- [Prerequisites](#prerequisites)
+- [How to run](#how-to-run)
+- [Environment variables](#environment-variables)
+- [How to get required API key values](#how-to-get-required-api-key-values)
+- [License](#license)
+- [About developer](#about-developer)
 
 <br/>
 
 ## Screenshots
 
-<p>Script running:</p>
+Script running:
 
-<img src="https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/cb2a1bdc-d2a1-4f75-a0aa-6a4464dc492b" alt="image" height=600>
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/cb2a1bdc-d2a1-4f75-a0aa-6a4464dc492b)
 
-<br/>
-
-<p>Pages created in the Notion DB</p>
+Pages created in the Notion DB
 
 ![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/0b1fdf1d-2899-41f9-b923-b5131b4692e7)
 
-<br/>
+Generated page content (includes direct link, title, and description enriched with AI)
 
-<p>Generated page content (includes direct link, title, and description enriched with AI)</p>
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/9046cab8-bfb4-4e66-8c2a-51d193a97f55)
 
-<img src="https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/9046cab8-bfb4-4e66-8c2a-51d193a97f55" alt="image" width=700>
-
-<br/><br/><br/>
+<br/><br/>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -63,7 +54,7 @@ In order to run this script, you will need:
 - An OpenAI account
 - The bookmarks file you want to import into Notion (compatible with any text format: *.txt, *.html, etc)
 
-<br/><br/><br/>
+<br/><br/>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -86,11 +77,11 @@ py main.py
 
 The script will read the URLs from the bookmarks file, scrape each web page, process the scraped information, and create a new page in your Notion DB.
 
-<br/><br/><br/>
+<br/><br/>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Environment Variables
+## Environment variables
 
 - `BOOKMARKS_FILE`: Relative path to your bookmarks file. <i>(Required)</i>
 - `OPENAI_API_KEY`: Your OpenAI's API. <i>(Required)</i>
@@ -101,7 +92,7 @@ The script will read the URLs from the bookmarks file, scrape each web page, pro
 
 Note: Instructions on how to get the API key values and database ID can be found in the [How to get required API key values](#how-to-get-required-api-key-values) section.
 
-<br/><br/><br/>
+<br/><br/>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -113,12 +104,18 @@ Instructions to get required API key values:
 
 To generate an OpenAI API key, follow these steps:
 
-1. Go to the OpenAI website (https://openai.com/).
-2. Click on the 'Sign Up' button in the top right corner of the page.
-3. Fill out the registration form with your details and click on the 'Create Account' button.
-4. Once you have created an account, go to the 'API keys' section of your account dashboard.
-5. Click on the 'Generate New Key' button to create a new API key.
-6. Copy the API key and you got the value for OPENAI_API_KEY
+1. Go directly to OpenAI API keys section: https://platform.openai.com/api-keys) (You must be logged in)
+2. Click on "Create new secret key"
+
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/f5b2b156-5110-48f8-a21e-7208b62ba1a0)
+
+3. Now you can choose a name, after that click on "Create secret key"
+
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/8c37e88c-519e-46ba-87a4-185c1e646e51)
+   
+4. That's it, now you got the value for OPENAI_API_KEY
+
+![image](https://github.com/CarlosUlisesOchoa/Bookmarks-to-Notion/assets/26280134/e0e812cd-4cec-405a-b4f1-b0ce4e281e33)
 
 Note: You may need to provide additional information or complete additional steps to verify your identity or payment information before you can generate an API key.
 
@@ -173,11 +170,17 @@ This project is released under the [MIT License](LICENSE).
 
 <br/>
 
+
+
+
 ## About developer
 
 Visit my web [Carlos Ochoa](https://carlos8a.com)
 
 <br/>
+
+
+
 
 ---
 
