@@ -175,7 +175,7 @@ This project is released under the [MIT License](LICENSE).
 
 ## About developer
 
-Visit my web [Carlos Ochoa](https://carlos8a.com)
+Visit my web [Carlos Ochoa](https://carlos8a.com?ref=gh)
 
 <br/>
 
